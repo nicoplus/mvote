@@ -1,0 +1,57 @@
+<!--index.html-->
+
+{% extends 'base.html' %}
+{% block title %}vote fun{% endblock %}
+{% block content %}
+<div class="container">
+	{% for m in messages %}
+	<div class="alert alert-{{ m.tags }}">{{ m }}</div>
+	{% endfor %}
+	<div class="panel panel-primary">
+		<div class="panel-heading" align="center">
+			<h3>Welcome to vote web</h3>
+			<p>Please login/logout with Facebook account in order to have access to vote and make a vote.</p>
+		</div>
+	</div>
+
+    {% load mvote_extras %}
+	<div class='row'>
+	    {% for poll in polls %}
+	        {% if forloop.first %}
+	            <div class='list-group'>
+	        {% endif %}
+	            <a href='{% url 'poll-url' poll.id %}' class='list-group-item'>
+	                <span class="glyphicon glyphicon-check"></span>
+	                <small>Total Votes:{{ poll.id | show_votes }},
+	                Items Count:{{ poll.id | show_items }}:</small>
+	                {{ poll.name }}, added by 【{{poll.user}}】
+	                <small><i>created at {{poll.created_at}}</i></small>
+
+	            </a>
+	        {% if forloop.last %}
+	            </div>
+	        {% endif %}
+	    {% empty %}
+	        <center><h3>No activity poll</h3></center>
+	    {% endfor %}
+	    <br>
+	</div>
+
+	<div class="row" align="center">
+	    {% if polls.has_previous %}
+	        <button class="btn btn-info">
+	            <a href="?p={{ polls.previous_page_number }}">Previous</a>
+	        </button>
+	    {% endif %}
+	    <button class="btn btn-info">
+	        No.{{ polls.number }}
+	    </button>
+	    {% if polls.has_next %}
+	        <button class='btn btn-info'>
+	            <a href="?p={{ polls.next_page_number }}">Next</a>
+	        </button>
+	    {% endif %}
+	</div>
+
+</div>
+{% endblock %}
